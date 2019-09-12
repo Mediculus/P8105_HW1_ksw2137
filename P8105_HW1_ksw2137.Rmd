@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
 library(tidyverse)
 library(dplyr)
 ```
@@ -24,12 +24,12 @@ Making a data frame with:
 * factor vector; length = 8, with 3 different factor “levels”
 * Taking the mean of each variable in your dataframe. What works and what doesn’t?
 
-```{r Problem 1, eval = TRUE}
+```{r Problem_1}
 
 prob1_df <- tibble(
   sample = rnorm(8),
   vec_logic = sample > 0,
-  vec_char = "GitHub",
+  vec_char = c("GitHub", "is", "super", "interesting", "and", "awesome", "I", "can't even..."),
 )
 
 var_sample = pull(prob1_df, sample)
@@ -48,9 +48,20 @@ convert the logical vector to numeric, and multiply the random sample by the res
 convert the logical vector to a factor, and multiply the random sample by the result
 convert the logical vector to a factor and then convert the result to numeric, and multiply the random sample by the result
 
+```{r Problem_2}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# Problem 2
+Create a data frame comprised of:
+
+* x: a random sample of size 500 from a standard Normal distribution
+* y: a random sample of size 500 from a standard Normal distribution
+* A logical vector indicating whether x + y > 1
+* A numeric vector created by coercing the above logical vector
+* A factor vector created by coercing the above logical vector
+* Write a short description of your vector using inline R code, including: * the size of the dataset (using nrow and ncol) * the mean, median, and standard deviation of x * the proportion of cases for which x + y > 1
+
+Make a scatterplot of y vs x; color points using the logical variable (adding color = ... inside of aes in your ggplot code should help). Make a second and third scatterplot that color points using the numeric and factor variables, respectively, and comment on the color scales.
+
+Export your first scatterplot to your project directory using ggsave
