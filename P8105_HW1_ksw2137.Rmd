@@ -5,14 +5,14 @@ date: "9/12/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
 library(tidyverse)
 library(dplyr)
 ```
 
 # **Introduction**
-This is a Rmarkdown document for P8105 Homework 1. Tidyverse and dplyr was loaded through a chunk with `include = FALSE`. This can be evaluated by accessing the actual .rmd file.
+This is an R-Markdown document for P8105 Homework 1. Tidyverse and dplyr was loaded through a chunk with `include = FALSE, message = FALSE, warning = FALSE`. This can be evaluated by accessing the actual .rmd file.
 
 # Problem 1
 ## *Problem 1.1*
@@ -30,27 +30,34 @@ set.seed(2)
 
 ## Creates a data-frame that is composed of vectors below
 prob1_df <- tibble(
-  sample = rnorm(8),                            ## Vector for random normal-distributed sample of size 8
-  vec_logic = sample > 0,                       ## Logical vector that evaluates if elements in sample > 0
-  vec_char = c("GitHub", "is", "super",         ## Character vector with 8 variables ("length == 8")
+  sample = rnorm(8),                              ## Vector for random normal-distributed sample of size 8
+  vec_logic = sample > 0,                         ## Logical vector that evaluates if elements in sample > 0
+  vec_char = c("GitHub", "is", "super",           ## Character vector with 8 variables ("length == 8")
                "interesting", "and", "awesome", 
                "I", "can't even..."),
+  vec_fac = c("corn", "not corn", "corn",         ## Factor vector size 8 with levels: "corn", 
+              "maybe corn", "corn", "maybe corn", ## "maybe corn", "not corn"
+              "corn", "not corn")
 )
 
 ## pull() function pulls the vectors inside prob1_df and turns it into usable variables outside the df
 ## Using prob1_df$vector was considered bad syntax and was not utilized
-var_sample = pull(prob1_df, sample)
-var_vec_logic = pull(prob1_df, vec_logic)
-var_vec_char = pull(prob1_df, vec_char)
+var_sample <- pull(prob1_df, sample)
+var_vec_logic <- pull(prob1_df, vec_logic)
+var_vec_char <- pull(prob1_df, vec_char)
+var_vec_fac <- pull(prob1_df, vec_fac)
 
 ## Takes the mean for each vectors
 mean(var_sample)
 mean(var_vec_logic)
 mean(var_vec_char)
+mean(var_vec_fac)
 
 ```
 
-Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(var_vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(var_vec_logic ==TRUE))`/`r length(var_vec_logic)` TRUE, thus the `r mean(var_vec_logic)`.
+Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(var_vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(var_vec_logic == TRUE))`/`r length(var_vec_logic)` TRUE, thus the `r mean(var_vec_logic)`.
+
+Mean for `var_vec_char` however, does not work. This is likely because characters are not read as "numbers" and therefore cannot be mathematically manipulated. 
 
 ## Problem 1.2
 Write a code chunk that applies the as.numeric function to the logical, character, and factor variables (please show this chunk but not the output). What happens, and why? Does this help explain what happens when you try to take the mean?
