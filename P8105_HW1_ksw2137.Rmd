@@ -6,16 +6,17 @@ output: html_document
 ---
 
 ```{r setup, include = FALSE, message = FALSE, warning = FALSE}
+
 knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
-library(tidyverse)
-library(dplyr)
+library(tidyverse)  ## loads tidyverse package; if not installed, use install(tidyverse) prior
+
 ```
 
 # **Introduction**
-This is an R-Markdown document for P8105 Homework 1. Tidyverse and dplyr was loaded through a chunk with `include = FALSE, message = FALSE, warning = FALSE`. This can be evaluated by accessing the actual .rmd file.
+This is an R-Markdown document for P8105 Homework 1. Tidyverse was loaded through a chunk with `include = FALSE, message = FALSE, warning = FALSE`. 
 
 # Problem 1
-## *Problem 1.1*
+## *Problem 1.a*
 Making a data frame with:
 
 * random sample; size 8, type = standard Normal distribution
@@ -24,9 +25,11 @@ Making a data frame with:
 * factor vector; length = 8, with 3 different factor “levels”
 * Taking the mean of each variable in your dataframe. What works and what doesn’t?
 
-```{r Problem_1}
+```{r Problem_1a}
+
 ## Seed used for reproducibility; remove for "true" function.
 set.seed(2)
+
 
 ## Creates a data-frame that is composed of vectors below
 prob1_df <- tibble(
@@ -35,10 +38,11 @@ prob1_df <- tibble(
   vec_char = c("GitHub", "is", "super",           ## Character vector with 8 variables ("length == 8")
                "interesting", "and", "awesome", 
                "I", "can't even..."),
-  vec_fac = factor(c("corn", "not corn", "corn",  ## Factor vector size 8 with levels: "corn", 
+  vec_fac = factor(c("corn", "not corn", "corn",  ## Factor vector size 8 with 3 levels: "corn", 
               "maybe corn", "corn", "maybe corn", ## "maybe corn", "not corn"
               "corn", "not corn"))
 )
+
 
 ## pull() function pulls the vectors inside prob1_df and turns it into usable variables outside the df
 ## Using prob1_df$vector was considered bad syntax and was not utilized
@@ -46,6 +50,7 @@ var_sample <- pull(prob1_df, sample)
 var_vec_logic <- pull(prob1_df, vec_logic)
 var_vec_char <- pull(prob1_df, vec_char)
 var_vec_fac <- pull(prob1_df, vec_fac)
+
 
 ## Takes the mean for each vectors
 mean(var_sample)
@@ -55,15 +60,24 @@ mean(var_vec_fac)
 
 ```
 
-Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(var_vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(var_vec_logic == TRUE))`/`r length(var_vec_logic)` TRUE, thus the `r mean(var_vec_logic)`.
+Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(var_vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(var_vec_logic == TRUE))`/`r length(var_vec_logic)` TRUE, thus the calculated mean.
 
-Mean for `var_vec_char` however, does not work. This is likely because characters are not read as "numbers" and therefore cannot be mathematically manipulated. 
+Mean for `var_vec_char` & `var_vec_fac` however, does not work. This is likely because characters are not read as "numbers" and therefore cannot be mathematically manipulated. 
 
-## Problem 1.2
+## *Problem 1.b*
 Write a code chunk that applies the as.numeric function to the logical, character, and factor variables (please show this chunk but not the output). What happens, and why? Does this help explain what happens when you try to take the mean?
 
+```{r Problem_1b, eval = FALSE}
 
-## Problem 1.3
+as.numeric(var_vec_logic)
+as.numeric(var_vec_char)
+as.numeric(var_vec_fac)
+
+```
+
+Using the commands `as.numeric()` seems to show a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn't have a numeric representation. Factor vectors however, show numbers 1-3 but calculating the mean indicates that the argument isn't numeric/logical. Likely because 1-3 is only used as a "category". 
+
+## *Problem 1.c*
 In a second code chunk:
 
 convert the logical vector to numeric, and multiply the random sample by the result
@@ -75,6 +89,8 @@ convert the logical vector to a factor and then convert the result to numeric, a
 ```
 
 # Problem 2
+## *Problem 2.a*
+
 Create a data frame comprised of:
 
 * x: a random sample of size 500 from a standard Normal distribution
@@ -83,6 +99,17 @@ Create a data frame comprised of:
 * A numeric vector created by coercing the above logical vector
 * A factor vector created by coercing the above logical vector
 * Write a short description of your vector using inline R code, including: * the size of the dataset (using nrow and ncol) * the mean, median, and standard deviation of x * the proportion of cases for which x + y > 1
+
+```{r Problem_2a}
+
+prob2_df <- tibble(
+  x = rnorm(500),
+  y = rnorm(500),
+  xy_logic = x + y > 1
+  
+)
+
+```
 
 Make a scatterplot of y vs x; color points using the logical variable (adding color = ... inside of aes in your ggplot code should help). Make a second and third scatterplot that color points using the numeric and factor variables, respectively, and comment on the color scales.
 
