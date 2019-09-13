@@ -402,7 +402,8 @@ prob1_df &lt;- tibble(
 )
 
 
-## pull() function pulls the vectors inside prob1_df and turns it into usable variables outside the df
+## pull() function pulls the vectors inside prob1_df and turns it into usable variables outside the df. This is 
+## inconvenient at this point but makes downstream access to these vectors easier. 
 ## Using prob1_df$vector was considered bad syntax and was not utilized
 var_sample &lt;- pull(prob1_df, sample)
 var_vec_logic &lt;- pull(prob1_df, vec_logic)
@@ -432,18 +433,19 @@ mean(var_sample)</code></pre>
 <pre class="r"><code>as.numeric(var_vec_logic)
 as.numeric(var_vec_char)
 as.numeric(var_vec_fac)</code></pre>
-<p>Using the commands <code>as.numeric()</code> seems to show a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn’t have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot obtain the mean.</p>
+<p>The command attempts to output a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn’t have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot obtain the mean.</p>
 <p>In the following code chunk, we explore this peculiarity:</p>
-<pre class="r"><code>as.numeric(var_vec_logic) * var_sample             ## Convert logical vector to numeric then multiplied with sample</code></pre>
+<pre class="r"><code>as.numeric(var_vec_logic) * var_sample      ## Convert logical vector to numeric then multiplied with sample</code></pre>
 <pre><code>## [1] 0.0000000 0.1848492 1.5878453 0.0000000 0.0000000 0.1324203 0.7079547
 ## [8] 0.0000000</code></pre>
-<pre class="r"><code>as.factor(var_vec_logic) * var_sample              ## Convert logical vector to factor then multiplied with sample</code></pre>
+<pre class="r"><code>as.factor(var_vec_logic) * var_sample       ## Convert logical vector to factor then multiplied with sample</code></pre>
 <pre><code>## Warning in Ops.factor(as.factor(var_vec_logic), var_sample): '*' not
 ## meaningful for factors</code></pre>
 <pre><code>## [1] NA NA NA NA NA NA NA NA</code></pre>
-<pre class="r"><code>as.numeric(as.factor(var_vec_logic)) * var_sample  ## Convert logical vector to factor then numeric then multiplied                                                       with sample</code></pre>
+<pre class="r"><code>as.numeric(as.factor(var_vec_logic)) * var_sample ## Convert logical vector to factor then numeric then multiplied                                                       with sample</code></pre>
 <pre><code>## [1] -0.89691455  0.36969837  3.17569066 -1.13037567 -0.08025176  0.26484057
 ## [7]  1.41590946 -0.23969802</code></pre>
+<p>With this exploration, we now can guesstimate that <code>factor()</code> stores the elements inside as characters categorized based on the “levels”. Only when we convert these elements into numeric using <code>as.numeric</code> to get their numerical representation of the “levels” can we then operate on the factor as “numbers”. We also notice that when we do this, <code>FALSE</code> is assigned 1 instead of 0 as in logical vectors, indicating that a factor’s lowest “numeric” is 1.</p>
 </div>
 </div>
 <div id="problem-2" class="section level1">
@@ -462,8 +464,9 @@ as.numeric(var_vec_fac)</code></pre>
 <pre class="r"><code>prob2_df &lt;- tibble(
   x = rnorm(500),
   y = rnorm(500),
-  xy_logic = x + y &gt; 1
-  
+  xy_logic = x + y &gt; 1,
+  xy_num = as.numeric(xy_logic),
+  xy_fac = as.factor(xy_logic)
 )</code></pre>
 <p>Make a scatterplot of y vs x; color points using the logical variable (adding color = … inside of aes in your ggplot code should help). Make a second and third scatterplot that color points using the numeric and factor variables, respectively, and comment on the color scales.</p>
 <p>Export your first scatterplot to your project directory using ggsave</p>
