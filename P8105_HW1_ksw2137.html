@@ -432,12 +432,18 @@ mean(var_sample)</code></pre>
 <pre class="r"><code>as.numeric(var_vec_logic)
 as.numeric(var_vec_char)
 as.numeric(var_vec_fac)</code></pre>
-<p>Using the commands <code>as.numeric()</code> seems to show a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn’t have a numeric representation. Factor vectors however, show numbers 1-3 but calculating the mean indicates that the argument isn’t numeric/logical. Likely because 1-3 is only used as a “category”.</p>
-</div>
-<div id="problem-1.c" class="section level2">
-<h2><em>Problem 1.c</em></h2>
-<p>In a second code chunk:</p>
-<p>convert the logical vector to numeric, and multiply the random sample by the result convert the logical vector to a factor, and multiply the random sample by the result convert the logical vector to a factor and then convert the result to numeric, and multiply the random sample by the result</p>
+<p>Using the commands <code>as.numeric()</code> seems to show a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn’t have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot obtain the mean.</p>
+<p>In the following code chunk, we explore this peculiarity:</p>
+<pre class="r"><code>as.numeric(var_vec_logic) * var_sample             ## Convert logical vector to numeric then multiplied with sample</code></pre>
+<pre><code>## [1] 0.0000000 0.1848492 1.5878453 0.0000000 0.0000000 0.1324203 0.7079547
+## [8] 0.0000000</code></pre>
+<pre class="r"><code>as.factor(var_vec_logic) * var_sample              ## Convert logical vector to factor then multiplied with sample</code></pre>
+<pre><code>## Warning in Ops.factor(as.factor(var_vec_logic), var_sample): '*' not
+## meaningful for factors</code></pre>
+<pre><code>## [1] NA NA NA NA NA NA NA NA</code></pre>
+<pre class="r"><code>as.numeric(as.factor(var_vec_logic)) * var_sample  ## Convert logical vector to factor then numeric then multiplied                                                       with sample</code></pre>
+<pre><code>## [1] -0.89691455  0.36969837  3.17569066 -1.13037567 -0.08025176  0.26484057
+## [7]  1.41590946 -0.23969802</code></pre>
 </div>
 </div>
 <div id="problem-2" class="section level1">

@@ -75,16 +75,15 @@ as.numeric(var_vec_fac)
 
 ```
 
-Using the commands `as.numeric()` seems to show a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn't have a numeric representation. Factor vectors however, show numbers 1-3 but calculating the mean indicates that the argument isn't numeric/logical. Likely because 1-3 is only used as a "category". 
+Using the commands `as.numeric()` seems to show a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn't have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot obtain the mean. 
 
-## *Problem 1.c*
-In a second code chunk:
-
-convert the logical vector to numeric, and multiply the random sample by the result
-convert the logical vector to a factor, and multiply the random sample by the result
-convert the logical vector to a factor and then convert the result to numeric, and multiply the random sample by the result
+In the following code chunk, we explore this peculiarity:
 
 ```{r Problem_1c}
+
+as.numeric(var_vec_logic) * var_sample             ## Convert logical vector to numeric then multiplied with sample
+as.factor(var_vec_logic) * var_sample              ## Convert logical vector to factor then multiplied with sample
+as.numeric(as.factor(var_vec_logic)) * var_sample  ## Convert logical vector to factor then numeric then multiplied                                                       with sample
 
 ```
 
@@ -108,6 +107,7 @@ prob2_df <- tibble(
   xy_logic = x + y > 1
   
 )
+
 
 ```
 
