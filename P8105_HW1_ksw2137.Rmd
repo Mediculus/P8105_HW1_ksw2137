@@ -2,7 +2,7 @@
 title: "Homework 1 - P8105/Data Science I"
 author: "Kevin S.W."
 date: "9/12/2019"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include = FALSE, message = FALSE, warning = FALSE}
@@ -17,17 +17,11 @@ This is an R-Markdown document for P8105 Homework 1. Tidyverse was loaded throug
 
 # Problem 1
 ## *Problem 1.a*
-Making a data frame with:
-
-* random sample; size 8, type = standard Normal distribution
-* logical vector indicating whether elements of the sample are greater than 0
-* Character vector; length = 8
-* factor vector; length = 8, with 3 different factor “levels”
-* Taking the mean of each variable in your dataframe. What works and what doesn’t?
+Data frame containing the variables as commented. 
 
 ```{r Problem_1a}
 
-## Seed used for reproducibility; remove for "true" function.
+## Seed used for reproducibility.
 set.seed(2)
 
 
@@ -61,12 +55,12 @@ mean(var_vec_fac)
 
 ```
 
-Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(var_vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(var_vec_logic == TRUE))`/`r length(var_vec_logic)` TRUE, thus the calculated mean.
+Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(var_vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(var_vec_logic == TRUE))`/`r length(var_vec_logic)` TRUE, hence the calculated mean.
 
 Mean for `var_vec_char` & `var_vec_fac` however, does not work. This is likely because characters are not read as "numbers" and therefore cannot be mathematically manipulated. 
 
 ## *Problem 1.b*
-Write a code chunk that applies the as.numeric function to the logical, character, and factor variables (please show this chunk but not the output). What happens, and why? Does this help explain what happens when you try to take the mean?
+Applying the as.numeric() function to logical, character, and factor variables:
 
 ```{r Problem_1b, eval = FALSE}
 
@@ -76,7 +70,7 @@ as.numeric(var_vec_fac)
 
 ```
 
-The command attempts to output a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn't have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot obtain the mean. 
+The command outputs a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn't have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot output a mean. 
 
 In the following code chunk, we explore this peculiarity:
 
@@ -88,32 +82,43 @@ as.numeric(as.factor(var_vec_logic)) * var_sample ## Convert logical vector to f
 
 ```
 
-With this exploration, we now can guesstimate that `factor()` stores the elements inside as characters categorized based on the "levels". Only when we convert these elements into numeric using `as.numeric` to get their numerical representation of the "levels" can we then operate on the factor as "numbers". We also notice that when we do this, `FALSE` is assigned 1 instead of 0 as in logical vectors, indicating that a factor's lowest "numeric" is 1. 
+With this exploration, we now can guesstimate that `factor()` stores the elements inside as characters categorized based on the "levels". Only when we convert these elements into numeric using `as.numeric` to get their numerical representation of the "levels" can we then operate on the factor as "numbers". We also notice that when we do this, `FALSE` is assigned 1 instead of 0 as in logical vectors, which indicates that a factor's lowest "numeric" is 1. 
 
 # Problem 2
 ## *Problem 2.a*
-
-Create a data frame comprised of:
-
-* x: a random sample of size 500 from a standard Normal distribution
-* y: a random sample of size 500 from a standard Normal distribution
-* A logical vector indicating whether x + y > 1
-* A numeric vector created by coercing the above logical vector
-* A factor vector created by coercing the above logical vector
-* Write a short description of your vector using inline R code, including: * the size of the dataset (using nrow and ncol) * the mean, median, and standard deviation of x * the proportion of cases for which x + y > 1
+Data frame for problem 2. 
 
 ```{r Problem_2a}
 
 prob2_df <- tibble(
-  x = rnorm(500),
-  y = rnorm(500),
-  xy_logic = x + y > 1,
-  xy_num = as.numeric(xy_logic),
-  xy_fac = as.factor(xy_logic)
+  x = rnorm(500),                ## Vector 1 of random normal distribution sample; size 500 
+  y = rnorm(500),                ## Vector 2 of random normal distribution sample; size 500 
+  xy_logic = (x + y) > 1,        ## Logical vector that evaluates the argument x + y > 1
+  xy_num = as.numeric(xy_logic), ## Vector that coerces xy_logic to be numeric vector
+  xy_fac = as.factor(xy_logic)   ## Vector that coerces xy_logic to a factor vector
 )
+
+
+## pulls variable from prob2_df out of the df so it's usable outside
+var_x <- pull(prob2_df, x)
+var_xy_logic <- pull(prob2_df, xy_logic)
 
 ```
 
+The `prob2_df` dataframe is a dataset of `r nrow(prob2_df) * ncol(prob2_df)` points in a grid of `r nrow(prob2_df)` rows X `r ncol(prob2_df)` columns. Columns contain values for `x`, `y`, `xy_logic`, `xy_num`, and `xy_fac`. 
+
+The `x` column has a mean of `r mean(var_x)`, median of `r median(var_x)`, and standard deviation of `r sd(var_x)`.
+
+The proportion of `TRUE` cases where `(x + y) > 1` is `r length(which(var_xy_logic == TRUE))`/`r length(var_xy_logic)`, which is `r (length(which(var_xy_logic == TRUE)) / length(var_xy_logic)) * 100`%.
+
+## *Problem 2.b*
 Make a scatterplot of y vs x; color points using the logical variable (adding color = ... inside of aes in your ggplot code should help). Make a second and third scatterplot that color points using the numeric and factor variables, respectively, and comment on the color scales.
+
+```{r}
+
+ggplot(data = prob2_df) + 
+  geom_point(aes(x = y, y = x), col = ifelse(var_xy_logic == TRUE, "red", "blue"))
+
+```
 
 Export your first scatterplot to your project directory using ggsave
