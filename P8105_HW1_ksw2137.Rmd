@@ -28,7 +28,7 @@ set.seed(2)
 ## Creates a data-frame that is composed of vectors below
 prob1_df <- tibble(
   df_sample = rnorm(8),                              ## Vector for random normal-distributed sample of size 8
-  df_vec_logic = df_sample > 0,                         ## Logical vector that evaluates if elements in sample > 0
+  df_vec_logic = df_sample > 0,                      ## Logical vector that evaluates if elements in sample > 0
   df_vec_char = c("GitHub", "is", "super",           ## Character vector with 8 variables ("length == 8")
                "interesting", "and", "awesome", 
                "I", "can't even..."),
@@ -64,6 +64,7 @@ Applying the `as.numeric()` function to logical, character, and factor variables
 
 ```{r Problem_1b, eval = FALSE}
 
+## Assesses each vectors as a numeric i.e. coercion?
 as.numeric(vec_logic)
 as.numeric(vec_char)
 as.numeric(vec_fac)
@@ -109,15 +110,16 @@ xy_fac <- pull(prob2_df, df_xy_fac)
 
 The `prob2_df` dataframe is a dataset of `r nrow(prob2_df) * ncol(prob2_df)` points in a grid of `r nrow(prob2_df)` rows X `r ncol(prob2_df)` columns. Columns contain values for `x`, `y`, `xy_logic`, `xy_num`, and `xy_fac`. 
 
-The `x` column has a mean (sd) of `r mean(x)`, median of `r median(x)`, and standard deviation of `r sd(x)`.
+The `x` column has a mean of `r mean(x)`, median of `r median(x)`, and standard deviation of `r sd(x)`.
 
 The proportion of `TRUE` cases where `(x + y) > 1` is `r length(which(xy_logic == TRUE))`/`r length(xy_logic)`, which is `r (length(which(xy_logic == TRUE)) / length(xy_logic)) * 100`%.
 
 ## *Problem 2.b*
-Make a scatterplot of y vs x; color points using the logical variable (adding color = ... inside of aes in your ggplot code should help). Make a second and third scatterplot that color points using the numeric and factor variables, respectively, and comment on the color scales.
+Making a scatterplot of `y` vs. `x` and applying conditional color based on `xy_logic`, `xy_num`, or `xy_fac`.
 
 ```{r}
 
+## ggplot by logic
 ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_logic)) + 
   geom_point() +
   labs(title = "Scatterplot for Y vs X", 
@@ -128,13 +130,18 @@ ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_logic)) +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         plot.subtitle = element_text(hjust = 0.5, size = 8))
 
-ggplot(data = prob2_df, aes(x = df_y, y = df_x, col = df_xy_num)) +
+
+## ggplot by numeric
+ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_num)) +
   geom_point()
 
 
-ggplot(data = prob2_df, aes(x = df_y, y = df_x, col = df_xy_fac)) +
+## ggplot by factor
+ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_fac)) +
   geom_point()
 
 ```
+
+Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE` although I suspect one is evaluated as number, while the other as character. ggplot by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows 2 colors only likely because we evaluated the logical variable (which only contains 0, 1). 
 
 Export your first scatterplot to your project directory using ggsave
