@@ -121,36 +121,36 @@ Making a scatterplot of `y` vs. `x` and applying conditional color based on `xy_
 ```{r Problem_2b}
 
 # ggplot of y vs x; by logic
-ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_logic)) + 
+ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_logic)) + 
   geom_point() +
-  labs(title = "Scatterplot for Y vs X", 
+  labs(title = "Scatterplot for X vs Y", 
        subtitle = "Sample size 500; random nml distribution",
-       x = "Y datapoints",
-       y = "X datapoints",
+       x = "X datapoints",
+       y = "Y datapoints",
        color = "(x + y) > 1") +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         plot.subtitle = element_text(hjust = 0.5, size = 8))
 
 
 # ggplot of y vs x; by numeric
-ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_num)) +
+ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_num)) +
   geom_point() +
-  labs(title = "Scatterplot for Y vs X", 
+  labs(title = "Scatterplot for X vs Y", 
        subtitle = "Sample size 500; random nml distribution",
-       x = "Y datapoints",
-       y = "X datapoints",
+       x = "X datapoints",
+       y = "Y datapoints",
        color = "(x + y) > 1") +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         plot.subtitle = element_text(hjust = 0.5, size = 8))
 
 
 # ggplot of y vs x; by factor
-ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_fac)) +
+ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_fac)) +
   geom_point() +
-  labs(title = "Scatterplot for Y vs X", 
+  labs(title = "Scatterplot for X vs Y", 
        subtitle = "Sample size 500; random nml distribution",
-       x = "Y datapoints",
-       y = "X datapoints",
+       x = "X datapoints",
+       y = "Y datapoints",
        color = "(x + y) > 1") +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         plot.subtitle = element_text(hjust = 0.5, size = 8))
