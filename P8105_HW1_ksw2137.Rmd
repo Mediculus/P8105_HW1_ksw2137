@@ -8,7 +8,7 @@ output: github_document
 ```{r setup, include = FALSE, message = FALSE, warning = FALSE}
 
 knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
-library(tidyverse)  ## loads tidyverse package; if not installed, use install(tidyverse) prior
+library(tidyverse)  # loads tidyverse package; if not installed, use install(tidyverse) prior
 
 ```
 
@@ -21,33 +21,33 @@ Data frame containing the variables as commented.
 
 ```{r Problem_1a}
 
-## Seed used for reproducibility.
+# Seed used for reproducibility
 set.seed(2)
 
 
-## Creates a data-frame that is composed of vectors below
+# Creates a data-frame that is composed of vectors below
 prob1_df <- tibble(
-  df_sample = rnorm(8),                              ## Vector for random normal-distributed sample of size 8
-  df_vec_logic = df_sample > 0,                      ## Logical vector that evaluates if elements in sample > 0
-  df_vec_char = c("GitHub", "is", "super",           ## Character vector with 8 variables ("length == 8")
+  df_sample = rnorm(8),                              # Vector for random normal-distributed sample of size 8
+  df_vec_logic = df_sample > 0,                      # Logical vector that evaluates if elements in sample > 0
+  df_vec_char = c("GitHub", "is", "super",           # Character vector with 8 variables ("length == 8")
                "interesting", "and", "awesome", 
                "I", "can't even..."),
-  df_vec_fac = factor(c("corn", "not corn", "corn",  ## Factor vector size 8 with 3 levels: "corn", 
-              "maybe corn", "corn", "maybe corn",    ## "maybe corn", "not corn"
+  df_vec_fac = factor(c("corn", "not corn", "corn",  # Factor vector size 8 with 3 levels: "corn", 
+              "maybe corn", "corn", "maybe corn",    # "maybe corn", "not corn"
               "corn", "not corn"))
 )
 
 
-## pull() function pulls the vectors inside prob1_df and turns it into usable variables outside the df. This is 
-## inconvenient at this point but makes downstream access to these vectors easier. 
-## Using prob1_df$vector was considered bad syntax and was not utilized
+# Pulls vectors inside prob1_df and turns it into usable variables outside
+# Inconvenient but makes downstream access to these vectors easier
+# Using prob1_df$vector was considered bad syntax and was not utilized
 sample <- pull(prob1_df, df_sample)
 vec_logic <- pull(prob1_df, df_vec_logic)
 vec_char <- pull(prob1_df, df_vec_char)
 vec_fac <- pull(prob1_df, df_vec_fac)
 
 
-## Takes the mean for each vectors
+# Takes the mean for each vectors
 mean(sample)
 mean(vec_logic)
 mean(vec_char)
@@ -55,35 +55,35 @@ mean(vec_fac)
 
 ```
 
-Taking the mean of sample seems to work as expected as it is a continuous variable. Logical vector surprisingly spits out a mean of `r mean(vec_logic)`. Looking into `prob1_df` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r length(which(vec_logic == TRUE))`/`r length(vec_logic)` TRUE, hence the calculated mean.
-
-Mean for `vec_char` & `vec_fac` however, does not work. This is likely because characters are not read as "numbers" and therefore cannot be mathematically manipulated. 
+Taking the mean of sample worked as expected as it is a continuous variable. Logical vector surprisingly outputs mean of `r mean(vec_logic)`. Mean for `vec_char` & `vec_fac` however, does not work. This is likely because characters are not read as "numbers" and therefore cannot be mathematically manipulated. 
 
 ## *Problem 1.b*
 Applying the `as.numeric()` function to logical, character, and factor variables:
 
 ```{r Problem_1b, eval = FALSE}
 
-## Assesses each vectors as a numeric i.e. coercion?
+# Assesses each vectors as a numeric i.e. coercion?
 as.numeric(vec_logic)
 as.numeric(vec_char)
 as.numeric(vec_fac)
 
 ```
 
-The command outputs a numeric value that represents each element in the vectors. While the logical vector shows 0/1, character vector shows NA indicating that it doesn't have a numeric representation. Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot output a mean. 
+The command coerces a numeric value that represents each element in the vectors. `vec_logic` seems to indicate that `FALSE` = 0 while `TRUE` = 1, which leads to `r sum(vec_logic)`/`r length(vec_logic)` TRUE, hence the calculated mean earlier.
 
-In the following code chunk, we explore this peculiarity:
+Character vector shows NA indicating that it doesn't have a numeric representation. 
+
+Factor vectors however, has the value 1-3; this does not explain why factor vectors cannot output a mean. In the following code chunk, we explore this peculiarity:
 
 ```{r Problem_1c}
 
-as.numeric(vec_logic) * sample      ## Convert logical vector to numeric then multiplied with sample
-as.factor(vec_logic) * sample       ## Convert logical vector to factor then multiplied with sample
-as.numeric(as.factor(vec_logic)) * sample ## Convert logical vector to factor then numeric then multiplied                                                       with sample
+as.numeric(vec_logic) * sample      # Convert logical vector to numeric then multiplied with sample
+as.factor(vec_logic) * sample       # Convert logical vector to factor then multiplied with sample
+as.numeric(as.factor(vec_logic)) * sample # Convert logical vector to factor then numeric then multiplied                                                       with sample
 
 ```
 
-With this exploration, we now can guesstimate that `factor()` stores the elements inside as characters categorized based on the "levels". Only when we convert these elements into numeric using `as.numeric` to get their numerical representation of the "levels" can we then operate on the factor as "numbers". We also notice that when we do this, `FALSE` is assigned 1 instead of 0 as in logical vectors, which indicates that a factor's lowest "numeric" is 1. 
+Based on results, we can guesstimate that `factor()` stores elements as characters categorized based on the "levels". When we coerce it into numeric, it labels the elements based on the levels' numeric value. Since it holds a number, we can then operate on the factor as "numbers". We also notice that when we double-coerced `FALSE`, it's assigned 1 instead of 0 as in logical vectors, which indicates that a factor's lowest "numeric" is 1. 
 
 # Problem 2
 ## *Problem 2.a*
@@ -91,16 +91,17 @@ Data frame for problem 2.
 
 ```{r Problem_2a}
 
+# Data frame consisting of commented vectors
 prob2_df <- tibble(
-  df_x = rnorm(500),                   ## Vector 1 of random normal distribution sample; size 500 
-  df_y = rnorm(500),                   ## Vector 2 of random normal distribution sample; size 500 
-  df_xy_logic = (df_x + df_y) > 1,     ## Logical vector that evaluates the argument x + y > 1
-  df_xy_num = as.numeric(df_xy_logic), ## Vector that coerces xy_logic to be numeric vector
-  df_xy_fac = as.factor(df_xy_logic)   ## Vector that coerces xy_logic to a factor vector
+  df_x = rnorm(500),                   # Vector 1 of random normal distribution sample; size 500 
+  df_y = rnorm(500),                   # Vector 2 of random normal distribution sample; size 500 
+  df_xy_logic = (df_x + df_y) > 1,     # Logical vector; evaluates argument: x + y > 1
+  df_xy_num = as.numeric(df_xy_logic), # Vector from coercing xy_logic to a numeric vector
+  df_xy_fac = as.factor(df_xy_logic)   # Vector from coercing xy_logic to a factor vector
 )
 
 
-## pulls variable from prob2_df out of the df so it's usable outside
+# pulls variable from prob2_df out of the df so it's usable outside
 x <- pull(prob2_df, df_x)
 xy_logic <- pull(prob2_df, df_xy_logic)
 xy_num <- pull(prob2_df, df_xy_num)
@@ -108,18 +109,18 @@ xy_fac <- pull(prob2_df, df_xy_fac)
 
 ```
 
-The `prob2_df` dataframe is a dataset of `r nrow(prob2_df) * ncol(prob2_df)` points in a grid of `r nrow(prob2_df)` rows X `r ncol(prob2_df)` columns. Columns contain values for `x`, `y`, `xy_logic`, `xy_num`, and `xy_fac`. 
+The `prob2_df` dataframe is a dataset of `r nrow(prob2_df) * ncol(prob2_df)` points in a grid of `r nrow(prob2_df)` rows x `r ncol(prob2_df)` columns. Columns contain values for `x`, `y`, `xy_logic`, `xy_num`, and `xy_fac`. 
 
 The `x` column has a mean of `r mean(x)`, median of `r median(x)`, and standard deviation of `r sd(x)`.
 
-The proportion of `TRUE` cases where `(x + y) > 1` is `r length(which(xy_logic == TRUE))`/`r length(xy_logic)`, which is `r (length(which(xy_logic == TRUE)) / length(xy_logic)) * 100`%.
+The proportion of `TRUE` cases where `(x + y) > 1` is `r sum(xy_logic)`/`r length(xy_logic)`, which is `r mean(xy_logic) * 100`%.
 
 ## *Problem 2.b*
 Making a scatterplot of `y` vs. `x` and applying conditional color based on `xy_logic`, `xy_num`, or `xy_fac`.
 
-```{r}
+```{r Problem_2b}
 
-## ggplot by logic
+# ggplot of y vs x; by logic
 ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_logic)) + 
   geom_point() +
   labs(title = "Scatterplot for Y vs X", 
@@ -131,17 +132,29 @@ ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_logic)) +
         plot.subtitle = element_text(hjust = 0.5, size = 8))
 
 
-## ggplot by numeric
+# ggplot of y vs x; by numeric
 ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_num)) +
-  geom_point()
+  geom_point() +
+  labs(title = "Scatterplot for Y vs X", 
+       subtitle = "Sample size 500; random nml distribution",
+       x = "Y datapoints",
+       y = "X datapoints",
+       color = "(x + y) > 1") +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        plot.subtitle = element_text(hjust = 0.5, size = 8))
 
 
-## ggplot by factor
+# ggplot of y vs x; by factor
 ggplot(data = prob2_df, aes(x = df_y, y = df_x, color = df_xy_fac)) +
-  geom_point()
+  geom_point() +
+  labs(title = "Scatterplot for Y vs X", 
+       subtitle = "Sample size 500; random nml distribution",
+       x = "Y datapoints",
+       y = "X datapoints",
+       color = "(x + y) > 1") +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        plot.subtitle = element_text(hjust = 0.5, size = 8))
 
 ```
 
-Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE` although I suspect one is evaluated as number, while the other as character. ggplot by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows 2 colors only likely because we evaluated the logical variable (which only contains 0, 1). 
-
-Export your first scatterplot to your project directory using ggsave
+Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE`. ggplot by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows 2 colors only likely because we evaluated the logical variable (which only contains 0, 1). 
