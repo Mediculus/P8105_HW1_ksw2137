@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
 ```
 
 # **Introduction**
-This is an R-Markdown document for P8105 Homework 1.
+This is an R-Markdown document for P8105 Homework 1. `knitr::opts_chunk$set()` function has been applied to an invisible chunk above that sets `echo` and `eval` to default `TRUE`. 
 
 ```{r load_library, eval = TRUE, message = FALSE, warning = FALSE}
 
@@ -164,4 +164,4 @@ ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_fac)) +
 
 ```
 
-Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE`. ggplot by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows 2 colors only likely because we evaluated the logical variable (which only contains 0, 1). 
+Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE`. `ggplot` by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows 2 colors only likely because we evaluated the logical variable (which only contains 0, 1). 
