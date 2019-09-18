@@ -1,7 +1,7 @@
 ---
 title: "Homework 1 - P8105/Data Science I"
 author: "Kevin S.W."
-date: "9/12/2019"
+date: "9/17/2019"
 output: github_document
 ---
 
@@ -44,7 +44,6 @@ prob1_df <- tibble(
 
 
 # Pulls vectors inside prob1_df and turns it into usable variables outside
-# Inconvenient but makes downstream access to these vectors easier
 # Using prob1_df$vector was considered bad syntax and was not utilized
 sample <- pull(prob1_df, df_sample)
 vec_logic <- pull(prob1_df, df_vec_logic)
@@ -88,7 +87,7 @@ as.numeric(as.factor(vec_logic)) * sample # Convert logical vector to factor the
 
 ```
 
-Based on results, we can guesstimate that `factor()` stores elements as characters categorized based on the "levels". When we coerce it into numeric, it labels the elements based on the levels' numeric value. Since it holds a number, we can then operate on the factor as "numbers". We also notice that when we double-coerced `FALSE`, it's assigned 1 instead of 0 as in logical vectors, which indicates that a factor's lowest "numeric" is 1. 
+Based on results, we can guesstimate that `factor()` stores elements as characters categorized based on the "levels". When we coerce it into numeric, it labels the elements based on the levels' numeric value. Since it holds a number, we can then operate on the factor as "numbers". We also notice that when we double-coerced `FALSE` logic, it's assigned 1 instead of 0 as in logical vectors, which indicates that a factor's lowest "numeric" is 1. 
 
 # Problem 2
 ## *Problem 2.a*
@@ -125,24 +124,25 @@ Making a scatterplot of `y` vs. `x` and applying conditional color based on `xy_
 
 ```{r Problem_2b}
 
-# ggplot of y vs x; by logic
+# Scatterplot of y vs x by logic. labs() changes the labels on listed variables. theme() centers title and changes 
+# font size
 ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_logic)) + 
   geom_point() +
-  labs(title = "Scatterplot for Y vs X", 
-       subtitle = "Sample size 500; random nml distribution by logic",
+  labs(title = "Scatterplot for Y vs X",                      
+       subtitle = "Sample size 500 of random normal distribution by logic",
        x = "X datapoints",
        y = "Y datapoints",
        color = "(x + y) > 1") +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         plot.subtitle = element_text(hjust = 0.5, size = 8))
 
-ggsave("1st Scatterplot by logic.png")
+ggsave("1st Scatterplot by logic.png")  # Saves the plot above to the current working directory
 
-# ggplot of y vs x; by numeric
+# Scatterplot of y vs x by numeric
 ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_num)) +
   geom_point() +
   labs(title = "Scatterplot for Y vs X", 
-       subtitle = "Sample size 500; random nml distribution by numeric",
+       subtitle = "Sample size 500 of random normal distribution by numeric",
        x = "X datapoints",
        y = "Y datapoints",
        color = "(x + y) > 1") +
@@ -150,11 +150,11 @@ ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_num)) +
         plot.subtitle = element_text(hjust = 0.5, size = 8))
 
 
-# ggplot of y vs x; by factor
+# Scatterplot of y vs x by factor
 ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_fac)) +
   geom_point() +
   labs(title = "Scatterplot for Y vs X", 
-       subtitle = "Sample size 500; random nml distribution by factor",
+       subtitle = "Sample size 500 of random normal distribution by factor",
        x = "X datapoints",
        y = "Y datapoints",
        color = "(x + y) > 1") +
@@ -164,4 +164,4 @@ ggplot(data = prob2_df, aes(x = df_x, y = df_y, color = df_xy_fac)) +
 
 ```
 
-Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE`. `ggplot` by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows 2 colors only likely because we evaluated the logical variable (which only contains 0, 1). 
+Evaluating these 3 graphs, we can see that all of them seems to be similar. Both ggplot by logic and by factor shows the same, discrete legends of `FALSE` and `TRUE`. `ggplot` by numeric however, shows a continuous gradient from 0 to 1. This is likely because it evaluates numeric as continuous variable. The plot however, shows only 2 colors likely because we evaluated the logical variable (which only contains 0, 1). 
