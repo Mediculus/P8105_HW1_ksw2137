@@ -3,6 +3,12 @@ Repo for HW1 in P8105 - Data Science I class
 
 Changelog summaries
 
+* Changelog 5 - 9/17/2019:
+  * Finalized changes in plot labels, style, etc.
+  * Final proofread on texts and codes/comments; added/modified comments to better explain code
+  * Finalized title, date, etc.
+  * Final version of text completed. 
+
 * Changelog 4 - 9/15/2019:
   * Touched up sentences and comments to be more succint
   * Found out that `mean(logical)` = proportion of `TRUE`; and `sum(logical)` = count of how many `TRUE`; subsequently changed relevant functions
